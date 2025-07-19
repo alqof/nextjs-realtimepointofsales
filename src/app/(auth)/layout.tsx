@@ -2,6 +2,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { Coffee } from 'lucide-react'
 import React from 'react'
 import LoginPage from './login/page'
+import { Toaster } from 'sonner'
 
 
 export default function AuthLayout({children}: {children: React.ReactNode}){
@@ -20,6 +21,8 @@ export default function AuthLayout({children}: {children: React.ReactNode}){
                     <p className='text-2xl md:text-3xl font-bold drop-shadow-md drop-shadow-green-400'> QopzKuy </p>
                 </div>
             </div>
+
+            <Toaster position='top-center' />
 
             {children}
         </div>
