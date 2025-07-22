@@ -11,3 +11,10 @@ export const INITIAL_LOGIN_STATE = {
         _form: [],
     },
 }
+
+export const INITIAL_PROFILE_STATE = {
+    id: '',
+    name: '',
+    role: '',
+    image_url: '',
+}

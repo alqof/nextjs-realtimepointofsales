@@ -1,11 +1,4 @@
-export type formState = {
-    errors?: {
-        _form?: string[];
-    };
-    status?: string;
-}
-
-export type AuthFormState = {
+export type authFormState = {
     status?: string;
     errors?: {
         name?: string[];
@@ -15,4 +8,18 @@ export type AuthFormState = {
         image_url?: string[];
         _form?: string[];
     };
+}
+
+export type formState = {
+    errors?: {
+        _form?: string[];
+    };
+    status?: string;
+}
+
+export type profileState = {
+    id?: string;
+    name?: string;
+    role?: string;
+    image_url?: string;
 }

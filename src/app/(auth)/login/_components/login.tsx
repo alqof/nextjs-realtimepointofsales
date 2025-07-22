@@ -10,7 +10,7 @@ import { loginSchemaValidation, LoginStateForm } from '@/lib/controller/auth-val
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { startTransition, useActionState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { actionForLogin } from '../actions';
+import { actionForLogin } from '../../../../lib/actions/auth-login-action';
 import { Loader } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -44,13 +44,7 @@ const Login = () => {
                     </svg>
                     {loginState.errors?._form?.[0]}
                 </span>,
-                {
-                    description: "We couldn't find your account. Please register to create a new one and get started.",
-                    // action: {
-                    //     label: "Undo",
-                    //     onClick: () => console.log("Undo"),
-                    // },
-                }
+                { description: "We couldn't find your account. Please register to create a new one and get started." }
             )
 
             startTransition(()=>{
@@ -99,12 +93,7 @@ const Login = () => {
                     </form>
                 </Form>
             </CardContent>
-
-            {/* <CardFooter>
-                <p>Card Footer</p>
-            </CardFooter> */}
         </Card>
     )
 }
-
 export default Login

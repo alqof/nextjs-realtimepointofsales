@@ -2,13 +2,13 @@
 
 import { loginSchemaValidation } from "@/lib/controller/auth-validation";
 import { createClient } from "@/lib/supabase/server";
-import { AuthFormState } from "@/lib/types";
+import { authFormState } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { INITIAL_LOGIN_STATE } from "@/lib/constants/auth-constant";
 
-export async function actionForLogin(prevState:AuthFormState, formData:FormData|null){
+export async function actionForLogin(prevState:authFormState, formData:FormData|null){
     if(!formData){
         return INITIAL_LOGIN_STATE
     }
@@ -50,8 +50,8 @@ export async function actionForLogin(prevState:AuthFormState, formData:FormData|
                 httpOnly: true,
                 path: '',
                 sameSite: 'lax',
-                maxAge: 60, // 1 menit
-                // maxAge: 60 * 60 * 24 * 365, // 1 tahun
+                maxAge: 60 * 60 * 24 * 365, // 1 tahun
+                // maxAge: 60, // 1 menit
             }
         )
     }
