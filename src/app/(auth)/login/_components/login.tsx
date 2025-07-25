@@ -1,26 +1,25 @@
 'use client';
 
-import FormInputSet from '@/components/form-input-set';
+import React, { startTransition, useActionState, useEffect } from 'react'
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { INITIAL_LOGIN_FORM, INITIAL_LOGIN_STATE } from '@/lib/constants/auth-constant'
-import { loginSchemaValidation, LoginStateForm } from '@/lib/controller/auth-validation'
+import { INITIAL_FORM_LOGIN, INITIAL_STATE_LOGIN } from '@/lib/constants/auth-constant'
+import { loginSchemaValidation, validationLoginForm } from '@/lib/validations/auth-validation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { startTransition, useActionState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { actionForLogin } from '../../../../lib/actions/auth-login-action';
+import { actionLogin } from '../../../../lib/actions/auth-login-action';
 import { Loader } from 'lucide-react';
 import { toast } from 'sonner';
 
 
 const Login = () => {
-    const formresolve = useForm<LoginStateForm>({
+    const formresolve = useForm<validationLoginForm>({
         resolver: zodResolver(loginSchemaValidation),
-        defaultValues: INITIAL_LOGIN_FORM,
+        defaultValues: INITIAL_FORM_LOGIN,
     })
-    const [loginState, loginAction, isLoginPending] = useActionState(actionForLogin, INITIAL_LOGIN_STATE)
+    const [loginState, loginAction, isLoginPending] = useActionState(actionLogin, INITIAL_STATE_LOGIN)
 
     const onSubmit = formresolve.handleSubmit(async (data) => {
         const formData = new FormData;
@@ -80,14 +79,14 @@ const Login = () => {
                             <FormItem>
                                 <FormLabel> Password </FormLabel>
                                 <FormControl>
-                                    <Input {...field} type='password' placeholder='Insert your password' autoComplete='off'/>
+                                    <Input {...field} type='password' placeholder='********' autoComplete='off'/>
                                 </FormControl>
                                 <FormMessage className='text-xs'/>
                             </FormItem>
                         )}/>
 
                         <div>
-                            <Button className='w-full mt-6'> {isLoginPending ? <Loader/> : 'Login'} </Button>
+                            <Button className='w-full mt-6' type='submit'> {isLoginPending ? <Loader/> : 'Login'} </Button>
                             <p className='mt-3 text-xs'>Don't you have account? <span className='font-bold'>Sign In</span> </p>
                         </div>
                     </form>

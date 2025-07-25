@@ -1,9 +1,9 @@
-export const INITIAL_LOGIN_FORM = {
+// LOGIN
+export const INITIAL_FORM_LOGIN = {
     email: '',
     password: '',
 }
-
-export const INITIAL_LOGIN_STATE = {
+export const INITIAL_STATE_LOGIN = {
     status: 'idle',
     errors: {
         email: [],
@@ -11,10 +11,45 @@ export const INITIAL_LOGIN_STATE = {
         _form: [],
     },
 }
-
-export const INITIAL_PROFILE_STATE = {
+export const INITIAL_STATE_PROFILE = {
     id: '',
     name: '',
     role: '',
     image_url: '',
 }
+
+
+// CREATE USER
+export const INITIAL_FORM_CREATE_USER = {
+    name: '',
+    email: '',
+    password: '',
+    role: '',
+    image_url: '',
+}
+export const INITIAL_STATE_CREATE_USER = {
+    status: 'idle',
+    errors: {
+        name: [],
+        email: [],
+        password: [],
+        role: [],
+        image_url: [],
+        _form: [],
+    },
+}
+
+export const INITIAL_ROLE = [
+    {
+        value: 'admin',
+        label: 'Admin',
+    },
+    {
+        value: 'kitchen',
+        label: 'Kitchen',
+    },
+    {
+        value: 'cashier',
+        label: 'Cashier',
+    },
+]

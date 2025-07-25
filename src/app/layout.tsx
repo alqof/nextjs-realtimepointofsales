@@ -25,7 +25,6 @@ export default async function RootLayout({children}: Readonly<{children: React.R
   // get cookies
   const cookiesStore = await cookies();
   const profile = JSON.parse(cookiesStore.get('user_profile')?.value ?? '{}');
-  console.log(profile)
 
   return (
     <html lang="en" suppressHydrationWarning>

@@ -1,16 +1,16 @@
 'use server'
 
-import { loginSchemaValidation } from "@/lib/controller/auth-validation";
+import { loginSchemaValidation } from "@/lib/validations/auth-validation";
 import { createClient } from "@/lib/supabase/server";
 import { authFormState } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { INITIAL_LOGIN_STATE } from "@/lib/constants/auth-constant";
+import { INITIAL_STATE_LOGIN } from "@/lib/constants/auth-constant";
 
-export async function actionForLogin(prevState:authFormState, formData:FormData|null){
+export async function actionLogin(prevState:authFormState, formData:FormData|null){
     if(!formData){
-        return INITIAL_LOGIN_STATE
+        return INITIAL_STATE_LOGIN
     }
     const validationFields = loginSchemaValidation.safeParse({
         email: formData.get('email'),

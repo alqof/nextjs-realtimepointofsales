@@ -12,6 +12,7 @@ export default function LayoutDashborad({children}: {children: React.ReactNode})
     return (
         <SidebarProvider>
             <AppSidebar/>
+            
             <SidebarInset className='overflow-x-hidden'>
                 <header className="h-16 flex justify-between items-center shrink-0 gap-2 transition-[width, height] ease-linear group-has-data[collabsible=icon]/sidebar-wrapper:h-12">
                     <div className="px-4 flex items-center gap-2">
@@ -27,6 +28,8 @@ export default function LayoutDashborad({children}: {children: React.ReactNode})
                 <main className="p-4">
                     {children}
                 </main>
+
+                <Toaster position='top-center' />
             </SidebarInset>
         </SidebarProvider>
     )
