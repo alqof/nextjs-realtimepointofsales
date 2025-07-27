@@ -1,30 +1,34 @@
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { INITIAL_FORM_CREATE_USER, INITIAL_ROLE, INITIAL_STATE_CREATE_USER } from "@/lib/constants/auth-constant";
-import { createUserSchemaValidation, validationCreateUserForm } from "@/lib/validations/auth-validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { actionCreateUser } from "@/lib/actions/create-user-action";
-import { toast } from "sonner";
-import { Loader } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { INITIAL_FORM_CREATE_USER, INITIAL_ROLE, INITIAL_STATE_CREATE_USER } from "@/lib/constants/auth-constant";
+import { createUserFormValidation, createUserSchema } from "@/lib/validations/auth-validation";
+import { actionCreateUser } from "@/lib/actions/action-create-user";
+import { toast } from "sonner";
+import { Camera, FileImage, Loader, UserRound } from "lucide-react";
+import { cn, getImageData } from "@/lib/utils";
+import { Preview } from "@/lib/types";
+import UiDialogForm from "./ui-dialog-form";
 
 export default function DialogCreateUser({refetch}: {refetch: ()=>void}) {
-    const formresolve = useForm<validationCreateUserForm>({
-        resolver: zodResolver(createUserSchemaValidation),
+    const formresolve = useForm<createUserFormValidation>({
+        resolver: zodResolver(createUserSchema),
         defaultValues: INITIAL_FORM_CREATE_USER,
     })
 
     const [createUserState, createUserAction, isCreateUserPending] = useActionState(actionCreateUser, INITIAL_STATE_CREATE_USER)
+    const [preview, setPreview] = useState<Preview | undefined>(undefined);
 
     const onSubmit = formresolve.handleSubmit(async (data) => {
         const formData = new FormData;
         Object.entries(data).forEach(([key, value]) => {
-            formData.append(key, value)
+            formData.append(key, key==='image_url' ? (preview?.file ?? '') : value)
         })
 
         // untuk menjalankan useActionState membutuhkan startTransition()
@@ -57,83 +61,141 @@ export default function DialogCreateUser({refetch}: {refetch: ()=>void}) {
                 </span>,
             );
             formresolve.reset();
+            setPreview(undefined);
             document.querySelector<HTMLButtonElement>('[data-state="open"]')?.click();
             refetch();
         }
     }, [createUserState])
     
     return(
-        
-        <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader className="mb-5">
-                <DialogTitle> Create User </DialogTitle>
-                <DialogDescription> Register a new user </DialogDescription>
-            </DialogHeader>
+        // ##### Refactor #####
+        <UiDialogForm formresolve={formresolve} onSubmit={onSubmit} isLoading={isCreateUserPending} type="Create" preview={preview} setPreview={setPreview} />
 
-            <Form {...formresolve}>
-                <form className='space-y-5' onSubmit={onSubmit}>
-                    {/* <FormInputSet formresolve={formresolve} label='email' name='email' type='email' placeholder='qwerty' /> */}
-                    <FormField control={formresolve.control} name='name' render={({field}) => (
-                        <FormItem>
-                            <FormLabel> Name </FormLabel>
-                            <FormControl>
-                                <Input {...field} placeholder='Insert your full name' autoComplete='off'/>
-                            </FormControl>
-                            <FormMessage className='text-xs'/>
-                        </FormItem>
-                    )}/>
+        // ##### Manual #####
+        // <DialogContent className="sm:max-w-[425px]">
+        //     <DialogHeader className="mb-5">
+        //         <DialogTitle> Create User </DialogTitle>
+        //         <DialogDescription> Register a new user </DialogDescription>
+        //     </DialogHeader>
 
-                    <FormField control={formresolve.control} name='email' render={({field}) => (
-                        <FormItem>
-                            <FormLabel> Email </FormLabel>
-                            <FormControl>
-                                <Input {...field} type='email' placeholder='Insert your email' autoComplete='off'/>
-                            </FormControl>
-                            <FormMessage className='text-xs'/>
-                        </FormItem>
-                    )}/>
+        //     <Form {...formresolve}>
+        //         <form className='space-y-5' onSubmit={onSubmit}>
+        //             {/* <FormInputSet formresolve={formresolve} label='email' name='email' type='email' placeholder='qwerty' /> */}
+        //             <FormField control={formresolve.control} name='name' render={({field}) => (
+        //                 <FormItem>
+        //                     <FormLabel> Name </FormLabel>
+        //                     <FormControl>
+        //                         <Input {...field} placeholder='Insert your full name' autoComplete='off'/>
+        //                     </FormControl>
+        //                     <FormMessage className='text-xs'/>
+        //                 </FormItem>
+        //             )}/>
 
-                    <FormField control={formresolve.control} name='role' render={({field: {onChange, ...rest}}) => (
-                        <FormItem>
-                            <FormLabel> Role </FormLabel>
-                            <FormControl>
-                                <Select {...rest} onValueChange={onChange}>
-                                    <SelectTrigger className={cn('w-full', {'border-red-600': formresolve.formState.errors['role']?.message})}>
-                                        <SelectValue placeholder="Select Role" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel> Role </SelectLabel>
-                                            {INITIAL_ROLE.map((item)=>(
-                                                <SelectItem key={item.label} value={item.value} className="capitalize"> {item.label} </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </FormControl>
-                            <FormMessage className='text-xs'/>
-                        </FormItem>
-                    )}/>
+        //             <FormField control={formresolve.control} name='email' render={({field}) => (
+        //                 <FormItem>
+        //                     <FormLabel> Email </FormLabel>
+        //                     <FormControl>
+        //                         <Input {...field} type='email' placeholder='Insert your email' autoComplete='off'/>
+        //                     </FormControl>
+        //                     <FormMessage className='text-xs'/>
+        //                 </FormItem>
+        //             )}/>
 
-                    <FormField control={formresolve.control} name='password' render={({field}) => (
-                        <FormItem>
-                            <FormLabel> Password </FormLabel>
-                            <FormControl>
-                                <Input {...field} type='password' placeholder='********' autoComplete='off'/>
-                            </FormControl>
-                            <FormMessage className='text-xs'/>
-                        </FormItem>
-                    )}/>
+        //             <FormField control={formresolve.control} name='role' render={({field: {onChange, ...rest}}) => (
+        //                 <FormItem>
+        //                     <FormLabel> Role </FormLabel>
+        //                     <FormControl>
+        //                         <Select {...rest} onValueChange={onChange}>
+        //                             <SelectTrigger className={cn('w-full', {'border-red-600': formresolve.formState.errors['role']?.message})}>
+        //                                 <SelectValue placeholder="Select Role" />
+        //                             </SelectTrigger>
+        //                             <SelectContent>
+        //                                 <SelectGroup>
+        //                                     <SelectLabel> Role </SelectLabel>
+        //                                     {INITIAL_ROLE.map((item)=>(
+        //                                         <SelectItem key={item.label} value={item.value} className="capitalize"> {item.label} </SelectItem>
+        //                                     ))}
+        //                                 </SelectGroup>
+        //                             </SelectContent>
+        //                         </Select>
+        //                     </FormControl>
+        //                     <FormMessage className='text-xs'/>
+        //                 </FormItem>
+        //             )}/>
 
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button className="cursor-pointer" variant="outline">Cancel</Button>
-                        </DialogClose>
+        //             <FormField control={formresolve.control} name="image_url" render={({ field: { onChange, ...rest } }) => (
+        //                 <FormItem>
+        //                     <FormLabel> Image </FormLabel>
+        //                     <FormControl>
+        //                         <div className="">
+        //                             <Avatar className="w-24 h-24 mb-2 rounded-lg">
+        //                                 <AvatarImage src={preview?.displayUrl} alt="preview" className="object-cover"/>
+        //                                 <AvatarFallback className="rounded-lg w-full h-full flex items-center justify-center">
+        //                                     <UserRound className="w-2/3 h-2/3"/>
+        //                                 </AvatarFallback>
+        //                             </Avatar>
+        //                             <Input
+        //                                 id="file-upload"
+        //                                 className="hidden"
+        //                                 type="file" 
+        //                                 name={rest.name} 
+        //                                 ref={rest.ref} 
+        //                                 onBlur={rest.onBlur} 
+        //                                 disabled={rest.disabled} 
+        //                                 accept="image/*"
+        //                                 onChange={ async (event) => { 
+        //                                         onChange(event);
+        //                                         const { file, displayUrl } = getImageData(event);
+        //                                         if (file) {
+        //                                             setPreview?.({ file, displayUrl });
+        //                                         }
+        //                                     }
+        //                                 }
+        //                             />
+        //                             <label htmlFor="file-upload" className="w-full max-w-full px-3 py-2 flex items-center justify-center gap-2 border border-dashed border-gray-600 bg-gray-900/80 text-sm text-gray-100 rounded-md cursor-pointer transition hover:bg-gray-800 hover:border-primary" style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+        //                                 <Camera className="w-4 h-4" />
+        //                                 {preview?.file?.name ? (
+        //                                     <span className="text-foreground break-words w-full"> {preview.file.name} </span>
+        //                                 ) : (
+        //                                     <span className="text-muted-foreground">Choose File</span>
+        //                                 )}
+        //                             </label>
+        //                         </div>
+        //                     </FormControl>
+        //                     <FormMessage className="text-xs" />
+        //                 </FormItem>
+        //                 )}
+        //             />
 
-                        <Button className='cursor-pointer' type="submit"> {isCreateUserPending ? <Loader/> : 'Submit'} </Button>
-                    </DialogFooter>
-                </form>
-            </Form>
-        </DialogContent>
+        //             <FormField control={formresolve.control} name='password' render={({field}) => (
+        //                 <FormItem>
+        //                     <FormLabel> Password </FormLabel>
+        //                     <FormControl>
+        //                         <Input {...field} type='password' placeholder='********' autoComplete='off'/>
+        //                     </FormControl>
+        //                     <FormMessage className='text-xs'/>
+        //                 </FormItem>
+        //             )}/>
+
+        //             <DialogFooter>
+        //                 <DialogClose asChild>
+        //                     <Button
+        //                         className="cursor-pointer"
+        //                         variant="outline"
+        //                         type="button"
+        //                         onClick={() => {
+        //                             formresolve.reset();
+        //                             setPreview(undefined);
+        //                         }}
+        //                     >
+        //                         Cancel
+        //                     </Button>
+        //                 </DialogClose>
+
+        //                 <Button className='cursor-pointer' type="submit"> {isCreateUserPending ? <Loader className="animate-spin"/> : 'Submit'} </Button>
+        //             </DialogFooter>
+        //         </form>
+        //     </Form>
+        // </DialogContent>
     )
 }

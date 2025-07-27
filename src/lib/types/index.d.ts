@@ -23,3 +23,8 @@ export type profileState = {
     role?: string;
     image_url?: string;
 }
+
+export type Preview = {
+    file: File; 
+    displayUrl: string
+}

@@ -13,7 +13,7 @@ export default function FormSelectSet<T extends FieldValues> (
         name,
         selectItem,
     }: {
-        className: string;
+        className?: string;
         formresolve: UseFormReturn<T>;
         label?: string;
         name: Path<T>;

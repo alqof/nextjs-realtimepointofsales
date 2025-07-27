@@ -1,18 +1,18 @@
 'use server'
 
-import { loginSchemaValidation } from "@/lib/validations/auth-validation";
 import { createClient } from "@/lib/supabase/server";
 import { authFormState } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { INITIAL_STATE_LOGIN } from "@/lib/constants/auth-constant";
+import { loginSchema } from "../validations/auth-validation";
 
 export async function actionLogin(prevState:authFormState, formData:FormData|null){
     if(!formData){
         return INITIAL_STATE_LOGIN
     }
-    const validationFields = loginSchemaValidation.safeParse({
+    const validationFields = loginSchema.safeParse({
         email: formData.get('email'),
         password: formData.get('password'),
     })
@@ -28,7 +28,7 @@ export async function actionLogin(prevState:authFormState, formData:FormData|nul
         }
     }
 
-    const supabase = await createClient({});
+    const supabase = await createClient();
     const {error, data} = await supabase.auth.signInWithPassword(validationFields.data);
     if(error){
         return{

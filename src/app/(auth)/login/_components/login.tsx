@@ -6,17 +6,17 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { INITIAL_FORM_LOGIN, INITIAL_STATE_LOGIN } from '@/lib/constants/auth-constant'
-import { loginSchemaValidation, validationLoginForm } from '@/lib/validations/auth-validation'
+import { loginFormValidation, loginSchema } from '@/lib/validations/auth-validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { actionLogin } from '../../../../lib/actions/auth-login-action';
+import { actionLogin } from '../../../../lib/actions/action-auth-login';
 import { Loader } from 'lucide-react';
 import { toast } from 'sonner';
 
 
 const Login = () => {
-    const formresolve = useForm<validationLoginForm>({
-        resolver: zodResolver(loginSchemaValidation),
+    const formresolve = useForm<loginFormValidation>({
+        resolver: zodResolver(loginSchema),
         defaultValues: INITIAL_FORM_LOGIN,
     })
     const [loginState, loginAction, isLoginPending] = useActionState(actionLogin, INITIAL_STATE_LOGIN)

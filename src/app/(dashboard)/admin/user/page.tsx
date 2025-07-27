@@ -12,6 +12,9 @@ import DropdownAction from "@/app/(dashboard)/admin/user/_components/dropdown-ac
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import DialogCreateUser from "./_components/dialog-create-user";
+import { profileState } from "@/lib/types";
+import DialogUpdateUser from "./_components/dialog-update-user";
+import DialogDeleteUser from "./_components/dialog-delete-user";
 
 
 export const HEADER_TABLE_USER = ['No', 'ID', 'Name', 'Role', 'Action'];
@@ -61,11 +64,11 @@ function useDebounce() {
     return debounce;
 }
 
-export default function userPage(){
+export default function useManagementPage(){
     const supabase = createClient();
+    
     const { currentSearh, handleChangeSearh, currentPage, handleChangePage, currentLimit, handleChangeLimit } = useTable();
-
-    const {data:users, isLoading, refetch } = useQuery({
+    const { data:users, isLoading, refetch } = useQuery({
         queryKey: ['users', currentSearh, currentPage, currentLimit],
         queryFn: async()=>{
             const result = await supabase
@@ -91,27 +94,38 @@ export default function userPage(){
         }
     })
 
+    const [selectedAction, setSelectedAction] = useState<{data: profileState, type: 'update'|'delete'} | null>();
+    const handleChangeAction = (open: boolean) => {
+        if(!open) setSelectedAction(null);
+    }
+
     const filteredData = useMemo(() => {
         return (users?.data || []).map((user, index) => {
             return [
-                index+1, 
+                currentLimit * (currentPage-1) + index + 1,
                 user.id, 
                 user.name, 
                 user.role, 
                 <DropdownAction
                     menu={[
                         {
-                            label: (
-                                <span className="flex item-center gap-2"> <Pencil /> Edit </span>
-                            ),
-                            action: () => {},
+                            label: (<span className="flex item-center gap-2"> <Pencil /> Edit </span>),
+                            action: () => {
+                                setSelectedAction({
+                                    data: user,
+                                    type: 'update'
+                                })
+                            },
                         },
                         {
-                            label: (
-                                <span className="flex item-center gap-2"> <Trash2 className="text-red-400" /> Delete </span>
-                            ),
+                            label: (<span className="flex item-center gap-2"> <Trash2 className="text-red-400" /> Delete </span>),
                             variant: 'destructive',
-                            action: () => {},
+                            action: () => {
+                                setSelectedAction({
+                                    data: user,
+                                    type: 'delete'
+                                })
+                            },
                         },
                     ]}
                 />,
@@ -123,7 +137,6 @@ export default function userPage(){
     }, [users, currentLimit])
 
 
-    
     return(
         <div className="w-full">
             <h1 className="mb-6 text-2xl text-green-800 dark:text-green-200 font-bold"> User Management </h1>
@@ -150,7 +163,7 @@ export default function userPage(){
                     <Input className="w-full" placeholder="Search...." onChange={(e)=>handleChangeSearh(e.target.value)}/>
                 </div>
 
-                {/* ADD USER */}
+                {/* CREATE USER */}
                 <Dialog>
                     <DialogTrigger asChild className="cursor-pointer">
                         <Button variant="outline"> <Plus/> Create </Button>
@@ -162,6 +175,20 @@ export default function userPage(){
 
             {/* TABLE */}
             <TableUser isLoading={isLoading} header={HEADER_TABLE_USER} data={filteredData} totalPages={totalPages} currentPage={currentPage} currentLimit={currentLimit} onChangePage={handleChangePage} onChangeLimit={handleChangeLimit} />
+
+            {/* Dialog Content */}
+            <DialogUpdateUser 
+                refetch={refetch}
+                currentData={selectedAction?.data}
+                open={selectedAction!==null && selectedAction?.type==='update'}
+                handleChangeAction={handleChangeAction}
+            />
+            <DialogDeleteUser
+                refetch={refetch}
+                currentData={selectedAction?.data}
+                open={selectedAction!==null && selectedAction?.type==='delete'}
+                handleChangeAction={handleChangeAction}
+            />
         </div>
     )
 }

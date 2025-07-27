@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { SIDEBAR_MENU, SidebarMenuKey } from "@/lib/constants/dashboard-constant"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
-import { signOut } from "@/lib/actions/auth-logout-action"
+import { signOut } from "@/lib/actions/action-auth-logout"
 import { useAuthStore } from "@/lib/store/auth-store"
 
 

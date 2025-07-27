@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Card } from "../../../../../components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../../../components/ui/table";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Loader2 } from "lucide-react";
 
 export default function TableUser(
     { isLoading, header, data, totalPages, currentPage, currentLimit, onChangePage, onChangeLimit }: 
@@ -43,7 +44,11 @@ export default function TableUser(
                         )}
                         {isLoading && (
                             <TableRow>
-                                <TableCell colSpan={header.length} className="h-24 text-center"> Loading... </TableCell>
+                                <TableCell colSpan={header.length} className="h-24 text-center"> 
+                                    <div className="flex items-center justify-center gap-2">
+                                        <Loader2 className="animate-spin"/> Loading...
+                                    </div> 
+                                </TableCell>
                             </TableRow>
                         )}
                     </TableBody>

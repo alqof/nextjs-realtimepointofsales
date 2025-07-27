@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 
 export async function signOut() {
-    const supabase = await createClient({});
+    const supabase = await createClient();
     const cookieStore = await cookies();
 
     try {
