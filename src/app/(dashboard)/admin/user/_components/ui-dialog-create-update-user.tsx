@@ -10,9 +10,15 @@ import { Loader2 } from "lucide-react";
 import { FormEvent } from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
-export default function UiDialogForm<T extends FieldValues>(
-    { formresolve, onSubmit, isLoading, type, preview, setPreview}:
-    {
+export default function UiDialogCreateUpdateUser<T extends FieldValues>(
+    { 
+        formresolve, 
+        onSubmit, 
+        isLoading, 
+        type, 
+        preview, 
+        setPreview
+    }: {
         formresolve: UseFormReturn<T>;
         onSubmit: (e: FormEvent<HTMLFormElement>)=>void;
         isLoading: boolean;

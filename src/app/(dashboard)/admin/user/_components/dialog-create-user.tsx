@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { Camera, FileImage, Loader, UserRound } from "lucide-react";
 import { cn, getImageData } from "@/lib/utils";
 import { Preview } from "@/lib/types";
-import UiDialogForm from "./ui-dialog-form";
+import UiDialogCreateUpdateUser from "./ui-dialog-create-update-user";
 
 export default function DialogCreateUser({refetch}: {refetch: ()=>void}) {
     const formresolve = useForm<createUserFormValidation>({
@@ -69,7 +69,7 @@ export default function DialogCreateUser({refetch}: {refetch: ()=>void}) {
     
     return(
         // ##### Refactor #####
-        <UiDialogForm formresolve={formresolve} onSubmit={onSubmit} isLoading={isCreateUserPending} type="Create" preview={preview} setPreview={setPreview} />
+        <UiDialogCreateUpdateUser formresolve={formresolve} onSubmit={onSubmit} isLoading={isCreateUserPending} type="Create" preview={preview} setPreview={setPreview} />
 
         // ##### Manual #####
         // <DialogContent className="sm:max-w-[425px]">

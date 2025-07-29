@@ -28,8 +28,7 @@ BEGIN
   RETURN NEW;
 end; $$ 
 LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = '';
+security definer set search_path = '';
 
 
 -- [trigger]
@@ -49,8 +48,7 @@ begin
   return old;
 end; $$ 
 language plpgsql
-security definer
-SET search_path = '';
+security definer set search_path = '';
 
 -- [trigger]
 create trigger on_auth_user_deleted

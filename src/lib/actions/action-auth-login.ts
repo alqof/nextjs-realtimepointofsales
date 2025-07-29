@@ -12,11 +12,11 @@ export async function actionLogin(prevState:authFormState, formData:FormData|nul
     if(!formData){
         return INITIAL_STATE_LOGIN
     }
+    
     const validationFields = loginSchema.safeParse({
         email: formData.get('email'),
         password: formData.get('password'),
     })
-    // console.log(validationFields)
 
     if(!validationFields.success){
         return {

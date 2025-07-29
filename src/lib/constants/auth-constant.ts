@@ -50,8 +50,6 @@ export const INITIAL_STATE_UPDATE_USER = {
 }
 
 
-
-
 // GENERAL
 export const INITIAL_ROLE = [
     {

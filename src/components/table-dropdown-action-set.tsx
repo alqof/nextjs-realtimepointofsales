@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../../../../components/ui/dropdown-menu';
-import { Button } from '../../../../../components/ui/button';
-import { Settings, UserCog } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { Button } from './ui/button';
+import { Bolt, Settings, UserCog } from 'lucide-react';
 
 
 export default function DropdownAction({menu}: {
@@ -16,8 +16,7 @@ export default function DropdownAction({menu}: {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="text-muted-foreground size-8 cursor-pointer" size="icon">
-                    <UserCog />
-                    {/* <Settings /> */}
+                    <Bolt />
                 </Button>
             </DropdownMenuTrigger>
 

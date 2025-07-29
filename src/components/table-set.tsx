@@ -1,12 +1,20 @@
 import { ReactNode } from "react";
-import { Card } from "../../../../../components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../../../components/ui/table";
+import { Card } from "./ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Loader2 } from "lucide-react";
 
-export default function TableUser(
-    { isLoading, header, data, totalPages, currentPage, currentLimit, onChangePage, onChangeLimit }: 
-    {
+export default function TableSet(
+    { 
+        isLoading, 
+        header, 
+        data, 
+        totalPages, 
+        currentPage, 
+        currentLimit, 
+        onChangePage, 
+        onChangeLimit 
+    }: {
         isLoading: boolean; 
         header: string[]; 
         data: (string | ReactNode)[][];
@@ -24,7 +32,7 @@ export default function TableUser(
                     <TableHeader className="bg-muted sticky top-0 z-10">
                         <TableRow>
                             {header.map((column) => (
-                                <TableHead key={`th-${column}`} className="px-6 py-3"> {column} </TableHead>
+                                <TableHead key={`th-${column}`} className="font-extrabold"> {column} </TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
@@ -33,7 +41,7 @@ export default function TableUser(
                         {data?.map((row, rowIndex) => (
                             <TableRow key={`tr-${rowIndex}`}>
                                 {row?.map((column, columnIndex) => (
-                                    <TableCell key={`th-${columnIndex}`} className="px-6 py-3"> {column} </TableCell>
+                                    <TableCell key={`th-${columnIndex}`} className=""> {column} </TableCell>
                                 ))}
                             </TableRow>
                         ))}

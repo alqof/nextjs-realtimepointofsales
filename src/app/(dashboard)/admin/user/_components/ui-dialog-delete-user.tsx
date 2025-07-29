@@ -1,9 +1,9 @@
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import DialogForm from "./ui-dialog-form";
+import DialogForm from "./ui-dialog-create-update-user";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-export default function UiDialogDelete(
+export default function UiDialogDeleteUser(
     { 
         title,
         isLoading,
@@ -19,7 +19,7 @@ export default function UiDialogDelete(
             <form className="grid gap-6">
                 <DialogHeader>
                     <DialogTitle> Delete {title} </DialogTitle>
-                    <DialogDescription> Are you sure you want to delete this <span className="lowercase">{title}</span> </DialogDescription>
+                    <DialogDescription> Are you sure you want to delete this <span className="lowercase font-bold">{title}</span>? </DialogDescription>
                 </DialogHeader>
 
                 <DialogFooter>
