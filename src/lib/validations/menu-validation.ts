@@ -15,7 +15,7 @@ export const menuSchema = z.object({
 })
 export type menuSchemaValidation = z.infer<typeof menuSchema> & {id: string}
 
-// Create Menu Schema
+// Create & Update Menu Schema
 export const createupdateMenuSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     description: z.string().min(1, 'Description is required'),

@@ -5,9 +5,9 @@ import { INITIAL_STATE_UPDATE_USER } from "@/lib/constants/auth-constant";
 import { updateUserFromValidation, updateUserSchema } from "@/lib/validations/auth-validation";
 import { toast } from "sonner";
 import { Preview, profileState } from "@/lib/types";
-import { actionUpdateUser } from "@/lib/actions/action-update-user";
 import { Dialog } from "@/components/ui/dialog";
 import UiDialogCreateUpdateUser from "./ui-dialog-create-update-user";
+import { actionUpdateUser } from "@/lib/actions/action-user";
 
 export default function DialogUpdateUser(
     { 

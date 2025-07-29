@@ -1,5 +1,5 @@
 create table public.menus (
-  id serial primary key,
+  id serial not null,
   name text,
   description text,
   price numeric,
@@ -8,7 +8,8 @@ create table public.menus (
   category text,
   is_available boolean,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  primary key(id)
 );
 
 -- Untuk mengaktifkan Row Level Security:

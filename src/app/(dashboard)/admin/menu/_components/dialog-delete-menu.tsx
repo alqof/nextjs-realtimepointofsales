@@ -2,11 +2,10 @@ import { startTransition, useActionState, useEffect, useState } from "react";
 import { INITIAL_ACTION_STATE, INITIAL_STATE_UPDATE_USER } from "@/lib/constants/auth-constant";
 import { toast } from "sonner";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { actionDeleteUser } from "@/lib/actions/action-delete-user";
 import { menuSchemaValidation } from "@/lib/validations/menu-validation";
 import UiDialogDeleteMenu from "./ui-dialog-delete-menu";
 import { title } from "process";
-import { actionDeleteMenu } from "@/lib/actions/action-delete-menu";
+import { actionDeleteMenu } from "@/lib/actions/action-menu";
 
 export default function DialogDeleteMenu(
     { 

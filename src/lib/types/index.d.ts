@@ -46,3 +46,16 @@ export type menuFormState = {
         _form?: string[];
     };
 }
+
+// TABLE MANAGEMENT
+export type tableFormState = {
+    status?: string;
+    errors?: {
+        id?: string[];
+        name?: string[];
+        description?: string[];
+        capacity?: string[];
+        status?: string[];
+        _form?: string[];
+    };
+}

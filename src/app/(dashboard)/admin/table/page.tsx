@@ -1,5 +1,11 @@
-export default function PageAdmin(){
-    return(
-        <>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem cumque esse aspernatur voluptates modi necessitatibus quos nemo aut, id, beatae distinctio odit, facilis ducimus non autem enim voluptas eos fugiat quibusdam quaerat dolorum quis excepturi! Laboriosam neque iure incidunt officia impedit, illum voluptatum alias! Aspernatur amet magnam totam tempora neque reiciendis nam ipsa alias voluptates sapiente voluptate quod ullam deserunt tenetur eaque quibusdam non, labore facere expedita laboriosam placeat? Expedita hic aspernatur optio repellendus et harum sit quod soluta iusto eligendi aperiam nesciunt voluptatum veritatis repudiandae, dolorem esse consequatur tempore deleniti vel nihil. Accusamus debitis placeat perferendis obcaecati vel labore.</>
-    )
+import { Metadata } from 'next'
+import PageTableManagement from './_components/001-pageTableManagement'
+
+export const metadata: Metadata = {
+    title: 'QopzKuy | Table'
+}
+
+
+export default function PageTable() {
+    return <PageTableManagement />
 }

@@ -94,6 +94,7 @@ export default function PageUserManagement(){
         data: profileState, 
         type: 'update'|'delete'
     } | null>();
+
     const handleChangeAction = (open: boolean) => {
         if(!open) setSelectedAction(null);
     }
@@ -162,7 +163,7 @@ export default function PageUserManagement(){
                     <Input className="w-full" placeholder="Search name ..." onChange={(e)=>handleChangeSearh(e.target.value)}/>
                 </div>
 
-                {/* CREATE USER */}
+                {/* CREATE */}
                 <Dialog>
                     <DialogTrigger asChild className="cursor-pointer">
                         <Button variant="outline"> <Plus/> Create </Button>

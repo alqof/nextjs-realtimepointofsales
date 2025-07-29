@@ -38,7 +38,7 @@ export const INITIAL_FORM_MENU = {
 };
 
 
-export const INITIAL_STATE_CREATE_MENU = {
+export const INITIAL_STATE_CREATE_UPDATE_MENU = {
     status: 'idle',
     errors: {
         id: [],
@@ -51,5 +51,4 @@ export const INITIAL_STATE_CREATE_MENU = {
         is_available: [],
         _form: [],
     },
-
 };

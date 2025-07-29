@@ -5,12 +5,11 @@ import { INITIAL_STATE_UPDATE_USER } from "@/lib/constants/auth-constant";
 import { updateUserFromValidation, updateUserSchema } from "@/lib/validations/auth-validation";
 import { toast } from "sonner";
 import { Preview, profileState } from "@/lib/types";
-import { actionUpdateUser } from "@/lib/actions/action-update-user";
 import { Dialog } from "@/components/ui/dialog";
 import { createupdateMenuSchema, createupdateMenuSchemaValidation, menuSchemaValidation } from "@/lib/validations/menu-validation";
-import { actionUpdateMenu } from "@/lib/actions/action-update-menu";
-import { INITIAL_STATE_CREATE_MENU } from "@/lib/constants/menu-constants";
 import UiDialogCreateUpdateMenu from "./ui-dialog-create-update-menu";
+import { INITIAL_STATE_CREATE_UPDATE_MENU } from "@/lib/constants/menu-constants";
+import { actionUpdateMenu } from "@/lib/actions/action-menu";
 
 export default function DialogUpdateMenu(
     { 
@@ -29,7 +28,7 @@ export default function DialogUpdateMenu(
         resolver: zodResolver(createupdateMenuSchema)
     })
 
-    const [updateMenuState, updateMenuAction, isUpdateMenuPending] = useActionState(actionUpdateMenu, INITIAL_STATE_CREATE_MENU)
+    const [updateMenuState, updateMenuAction, isUpdateMenuPending] = useActionState(actionUpdateMenu, INITIAL_STATE_CREATE_UPDATE_MENU)
     const [preview, setPreview] = useState<Preview | undefined>(undefined);
 
     const onSubmit = formresolve.handleSubmit(async (data) => {
