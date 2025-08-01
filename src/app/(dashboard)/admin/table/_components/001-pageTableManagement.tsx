@@ -2,20 +2,20 @@
 import React, { useMemo, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_TABLE, TABLE_LIMIT_LIST } from '@/lib/constants/dashboard-constant';
+import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_TABLE, TABLE_LIMIT_LIST } from '@/lib/constants/general-constant';
 import { toast } from 'sonner';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import DropdownAction from '../../../../../components/table-dropdown-action-set';
 import TableSet from '@/components/table-set';
-import { tableSchemaValidation } from '@/lib/validations/table-validations';
+import { tableSchemaValidation } from '@/lib/validations/validation-table';
 import { cn } from '@/lib/utils';
 import DialogCreateTable from './dialog-create-table';
 import DialogUpdateTable from './dialog-update-table';
 import DialogDeleteTable from './dialog-delete-table';
+import TableColumnDropdownAction from '../../../../../components/table-dropdown-action-set';
 
 
 
@@ -116,12 +116,12 @@ export default function PageTableManagement() {
                 table.description,
                 table.capacity,
                 <div className={cn('w-fit px-2 py-1 rounded-full',
-                        (table.status==='available' ? 'bg-green-600' : table.status==='unavailable' ? 'bg-red-600' : table.status==='reserve' ? 'bg-orange-600' : 'bg-gray-400')
+                        (table.status==='available' ? 'bg-green-600' : table.status==='unavailable' ? 'bg-red-600' : table.status==='reserved' ? 'bg-orange-600' : 'bg-gray-400')
                     )}
                 >
                     <span className="font-bold text-xs text-white text-shadow-lg"> {table.status} </span>
                 </div>,
-                <DropdownAction
+                <TableColumnDropdownAction
                     menu={[
                         {
                             label: (<span className="flex item-center gap-2"> <Pencil /> Edit </span>),

@@ -4,8 +4,8 @@ export const INITIAL_MENU_CATEGORY = [
         label: 'Coffee',
     },
     {
-        value: 'Non Coffee',
-        label: 'Non Coffee',
+        value: 'Non-Coffee',
+        label: 'Non-Coffee',
     },
     {
         value: 'Food',

@@ -20,7 +20,7 @@ export default function FormSelectSet<T extends FieldValues> (
         selectItem: { //array object
             value: string;
             label: string;
-            disable?: boolean
+            disabled?: boolean
         }[];
     }
 ){
@@ -37,7 +37,7 @@ export default function FormSelectSet<T extends FieldValues> (
                             <SelectGroup>
                                 <SelectLabel> {label} </SelectLabel>
                                 {selectItem.map((item)=>(
-                                    <SelectItem key={item.label} value={item.value} disabled={item.disable} className="capitalize"> {item.label} </SelectItem>
+                                    <SelectItem key={item.label} value={item.value} disabled={item.disabled} className="capitalize"> {item.label} </SelectItem>
                                 ))}
                             </SelectGroup>
                         </SelectContent>

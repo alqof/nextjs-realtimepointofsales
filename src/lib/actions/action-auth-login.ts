@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { INITIAL_STATE_LOGIN } from "@/lib/constants/auth-constant";
-import { loginSchema } from "../validations/auth-validation";
+import { loginSchema } from "../validations/validation-auth";
 
 export async function actionLogin(prevState:authFormState, formData:FormData|null){
     if(!formData){

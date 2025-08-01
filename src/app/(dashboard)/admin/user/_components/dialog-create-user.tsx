@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { INITIAL_FORM_CREATE_USER, INITIAL_ROLE, INITIAL_STATE_CREATE_USER } from "@/lib/constants/auth-constant";
-import { createUserFormValidation, createUserSchema } from "@/lib/validations/auth-validation";
+import { createUserFormValidation, createUserSchema } from "@/lib/validations/validation-auth";
 import { actionCreateUser } from "@/lib/actions/action-user";
 import { toast } from "sonner";
 import { Camera, FileImage, Loader, UserRound } from "lucide-react";

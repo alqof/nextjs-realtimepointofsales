@@ -2,10 +2,10 @@ import { startTransition, useActionState, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import UiDialogCreateUpdateTable from "./ui-dialog-create-update-table";
-import { createupdateTableSchema, createupdateTableSchemaValidation } from "@/lib/validations/table-validations";
+import { createupdateTableSchema, createupdateTableSchemaValidation } from "@/lib/validations/validation-table";
 import { INITIAL_DEFAULT_FORM_TABLE, INITIAL_STATE_CREATE_UPDATE_TABLE } from "@/lib/constants/table-constant";
 import { actionCreateTable } from "@/lib/actions/action-table";
+import UiDialogCreateUpdateTable from "./ui-dialog-create-update-table";
 
 export default function DialogCreateTable({refetch}: {refetch: ()=>void}) {
     const formresolve = useForm<createupdateTableSchemaValidation>({

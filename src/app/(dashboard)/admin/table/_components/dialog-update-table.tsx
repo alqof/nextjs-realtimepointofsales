@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Dialog } from "@/components/ui/dialog";
 import { INITIAL_STATE_CREATE_UPDATE_TABLE } from "@/lib/constants/table-constant";
-import { createupdateTableSchema, createupdateTableSchemaValidation, tableSchemaValidation } from "@/lib/validations/table-validations";
+import { createupdateTableSchema, createupdateTableSchemaValidation, tableSchemaValidation } from "@/lib/validations/validation-table";
 import { actionUpdateTable } from "@/lib/actions/action-table";
 import UiDialogCreateUpdateTable from "./ui-dialog-create-update-table";
 

@@ -50,7 +50,6 @@ export const INITIAL_STATE_UPDATE_USER = {
 }
 
 
-// GENERAL
 export const INITIAL_ROLE = [
     {
         value: 'admin',
@@ -65,7 +64,3 @@ export const INITIAL_ROLE = [
         label: 'Cashier',
     },
 ]
-export const INITIAL_ACTION_STATE = {
-    status: 'idle',
-    errors: { _form: [] }
-}

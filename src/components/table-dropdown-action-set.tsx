@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Bolt, Settings, UserCog } from 'lucide-react';
 
 
-export default function DropdownAction({menu}: {
+export default function TableColumnDropdownAction({menu}: {
     menu: {
         label: string | ReactNode;
         variant?: 'destructive' | 'default';
@@ -15,7 +15,7 @@ export default function DropdownAction({menu}: {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-muted-foreground size-8 cursor-pointer" size="icon">
+                <Button variant="ghost" className="data-[state=open]:bg-muted size-8 cursor-pointer" size="icon">
                     <Bolt />
                 </Button>
             </DropdownMenuTrigger>

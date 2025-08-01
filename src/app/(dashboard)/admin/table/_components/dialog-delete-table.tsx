@@ -1,11 +1,11 @@
 import { startTransition, useActionState, useEffect, useState } from "react";
-import { INITIAL_ACTION_STATE, INITIAL_STATE_UPDATE_USER } from "@/lib/constants/auth-constant";
 import { toast } from "sonner";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { menuSchemaValidation } from "@/lib/validations/menu-validation";
+import { menuSchemaValidation } from "@/lib/validations/validation-menu";
 import UiDialogDeleteTable from "./ui-dialog-delete-table";
 import { actionDeleteTable } from "@/lib/actions/action-table";
-import { tableSchemaValidation } from "@/lib/validations/table-validations";
+import { tableSchemaValidation } from "@/lib/validations/validation-table";
+import { INITIAL_ACTION_STATE } from "@/lib/constants/general-constant";
 
 export default function DialogDeleteTable(
     { 

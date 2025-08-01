@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createUserSchema, updateUserSchema } from "@/lib/validations/auth-validation";
+import { createUserSchema, updateUserSchema } from "@/lib/validations/validation-auth";
 import { createClient } from "@/lib/supabase/server";
 import { authFormState } from "@/lib/types";
 import { INITIAL_STATE_CREATE_USER } from "@/lib/constants/auth-constant";

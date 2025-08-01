@@ -7,10 +7,10 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
-      <div className="bg-mute">
-        <h1 className="text-xl"> Welcome to QopzKuy</h1>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-mute">
+        <h1 className="text-xl mb-4"> Welcome to QopzKuy</h1>
         <Link href="/admin">
-        <Button className="cursor-pointer"> Access to Dashboard</Button>
+          <Button className="cursor-pointer"> Access to Dashboard</Button>
         </Link>
       </div>
       {/* <ThemeToggle/> */}

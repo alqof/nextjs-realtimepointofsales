@@ -1,3 +1,5 @@
+import { menuSchemaValidation } from "../validations/validation-menu";
+
 // USER MANAGEMENT
 export type authFormState = {
     status?: string;
@@ -59,3 +61,23 @@ export type tableFormState = {
         _form?: string[];
     };
 }
+
+// ORDER MANAGEMENT
+export type orderFormState = {
+    status?: string;
+    errors?: {
+        customer_name?: string[];
+        table_id?: string[];
+        status?: string[];
+        _form?: string[];
+    };
+}
+
+export type cartState = {
+    order_id?: string;
+    menu_id: string;
+    menu: menuSchemaValidation;
+    notes: string;
+    quantity: number;
+    total: number;
+};

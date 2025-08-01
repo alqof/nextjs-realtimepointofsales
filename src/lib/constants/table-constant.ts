@@ -8,8 +8,8 @@ export const INITAL_TABLE_STATUS = [
         label: 'unavailable',
     },
     {
-        value: 'reserve',
-        label: 'reserve',
+        value: 'reserved',
+        label: 'reserved',
     },
 ]
 

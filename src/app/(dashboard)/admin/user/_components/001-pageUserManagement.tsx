@@ -7,15 +7,15 @@ import { LucideClockFading, Pencil, Plus, Trash2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
-import DropdownAction from "@/components/table-dropdown-action-set";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { profileState } from "@/lib/types";
 import DialogCreateUser from "./dialog-create-user";
 import DialogUpdateUser from "./dialog-update-user";
 import DialogDeleteUser from "./dialog-delete-user";
-import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_USER, TABLE_LIMIT_LIST } from "@/lib/constants/dashboard-constant";
+import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_USER, TABLE_LIMIT_LIST } from "@/lib/constants/general-constant";
 import TableSet from "@/components/table-set";
+import TableColumnDropdownAction from "@/components/table-dropdown-action-set";
 
 
 // Hooks Table
@@ -106,7 +106,7 @@ export default function PageUserManagement(){
                 user.id, 
                 user.name, 
                 user.role, 
-                <DropdownAction
+                <TableColumnDropdownAction
                     menu={[
                         {
                             label: (<span className="flex item-center gap-2"> <Pencil /> Edit </span>),

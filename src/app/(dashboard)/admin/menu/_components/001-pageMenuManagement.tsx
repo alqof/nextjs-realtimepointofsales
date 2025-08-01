@@ -3,22 +3,22 @@ import { Metadata } from 'next'
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_MENU, TABLE_LIMIT_LIST } from '@/lib/constants/dashboard-constant';
+import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_MENU, TABLE_LIMIT_LIST } from '@/lib/constants/general-constant';
 import React, { useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner';
 import { Check, ImageOff, Loader2, Pencil, Plus, Trash2, X } from 'lucide-react';
-import { menuSchemaValidation } from '@/lib/validations/menu-validation';
+import { menuSchemaValidation } from '@/lib/validations/validation-menu';
 import { cn, convertIDR } from '@/lib/utils';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import DropdownAction from '../../../../../components/table-dropdown-action-set';
 import TableSet from '@/components/table-set';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DialogCreateMenu from './dialog-create-menu';
 import DialogUpdateMenu from './dialog-update-menu';
 import DialogDeleteMenu from './dialog-delete-menu';
+import TableColumnDropdownAction from '../../../../../components/table-dropdown-action-set';
 
 
 // Hooks Table
@@ -64,8 +64,9 @@ function useDebounce() {
 }
 
 export default function PageMenuManagement() {
-    const supabase = createClient();
     const { currentSearch, handleChangeSearh, currentPage, handleChangePage, currentLimit, handleChangeLimit } = useTable();
+    
+    const supabase = createClient();
     const { data:menus, isLoading, refetch } = useQuery({
         queryKey: ['menus', currentSearch, currentPage, currentLimit],
         queryFn: async()=>{
@@ -74,7 +75,8 @@ export default function PageMenuManagement() {
                 .select('*', { count: 'exact' })
                 .range((currentPage - 1) * currentLimit, currentPage * currentLimit - 1)
                 .order('category', { ascending: true })
-                .order('name', { ascending: true });
+                .order('name', { ascending: true })
+            ;
 
             if(currentSearch) {
                 query.or(`name.ilike.%${currentSearch}%,category.ilike.%${currentSearch}%`);
@@ -136,7 +138,7 @@ export default function PageMenuManagement() {
                     <span className="text-white text-shadow-md"> {menu.is_available ? <Check size={12}/> : <X size={12}/>} </span>
                     {/* <span className="font-bold text-xs text-white text-shadow-lg"> {menu.is_available ? 'Available' : 'Not Available'} </span> */}
                 </div>,
-                <DropdownAction
+                <TableColumnDropdownAction
                     menu={[
                         {
                             label: (<span className="flex item-center gap-2"> <Pencil /> Edit </span>),

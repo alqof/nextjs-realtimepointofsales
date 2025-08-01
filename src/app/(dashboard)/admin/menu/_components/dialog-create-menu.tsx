@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Preview } from "@/lib/types";
 import UiDialogCreateUpdateMenu from "./ui-dialog-create-update-menu";
-import { createupdateMenuSchema, createupdateMenuSchemaValidation } from "@/lib/validations/menu-validation";
+import { createupdateMenuSchema, createupdateMenuSchemaValidation } from "@/lib/validations/validation-menu";
 import { INITIAL_FORM_MENU, INITIAL_STATE_CREATE_UPDATE_MENU } from "@/lib/constants/menu-constants";
 import { actionCreateMenu } from "@/lib/actions/action-menu";
 

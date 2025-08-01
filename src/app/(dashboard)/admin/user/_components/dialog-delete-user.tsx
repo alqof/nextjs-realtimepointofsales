@@ -1,13 +1,13 @@
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { INITIAL_ACTION_STATE, INITIAL_STATE_UPDATE_USER } from "@/lib/constants/auth-constant";
-import { updateUserFromValidation, updateUserSchema } from "@/lib/validations/auth-validation";
+import { updateUserFromValidation, updateUserSchema } from "@/lib/validations/validation-auth";
 import { toast } from "sonner";
 import { Preview, profileState } from "@/lib/types";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import UiDialogDeleteUser from "./ui-dialog-delete-user";
 import { actionDeleteUser } from "@/lib/actions/action-user";
+import { INITIAL_ACTION_STATE } from "@/lib/constants/general-constant";
 
 export default function DialogDeleteUser(
     { 

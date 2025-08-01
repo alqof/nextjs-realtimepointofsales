@@ -1,7 +1,7 @@
 'use server'
 import { createClient } from "@/lib/supabase/server";
 import { tableFormState } from "../types";
-import { tableSchema } from "../validations/table-validations";
+import { tableSchema } from "../validations/validation-table";
 
 
 export async function actionCreateTable(prevState:tableFormState, formData: FormData){

@@ -2,7 +2,7 @@ import { startTransition, useActionState, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { INITIAL_STATE_UPDATE_USER } from "@/lib/constants/auth-constant";
-import { updateUserFromValidation, updateUserSchema } from "@/lib/validations/auth-validation";
+import { updateUserFromValidation, updateUserSchema } from "@/lib/validations/validation-auth";
 import { toast } from "sonner";
 import { Preview, profileState } from "@/lib/types";
 import { Dialog } from "@/components/ui/dialog";

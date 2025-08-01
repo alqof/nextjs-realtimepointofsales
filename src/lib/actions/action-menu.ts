@@ -1,7 +1,7 @@
 'use server'
 import { createClient } from "@/lib/supabase/server";
 import { actionDeleteFile, actionUploadFile } from "./storage-action";
-import { menuSchema } from "../validations/menu-validation";
+import { menuSchema } from "../validations/validation-menu";
 import { menuFormState } from "../types";
 
 export async function actionCreateMenu(prevState:menuFormState, formData: FormData){

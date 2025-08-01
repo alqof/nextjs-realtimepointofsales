@@ -3,7 +3,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupConte
 import { Calendar, ChevronUp, CircleUserRound, Coffee, EllipsisVertical, Home, Inbox, LogOut, Search, Settings, ShoppingCart, User2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { SIDEBAR_MENU, SidebarMenuKey } from "@/lib/constants/dashboard-constant"
+import { SIDEBAR_MENU, SidebarMenuKey } from "@/lib/constants/general-constant"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { signOut } from "@/lib/actions/action-auth-logout"
