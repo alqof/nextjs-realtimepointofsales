@@ -159,6 +159,44 @@ export async function actionUpdateMenu(prevState:menuFormState, formData: FormDa
 
 export async function actionDeleteMenu(prevState: menuFormState, formData: FormData) {
     const supabase = await createClient();
+
+    // Get current user && Ambil role user dari table profiles
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Unauthorized access!"],
+            },
+        };
+    }
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single()
+    ;
+    if (profileError || !profile) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Profile not found!"],
+            },
+        };
+    }
+
+    // Hanya admin yang bisa delete
+    if (profile.role !== "admin") {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["You are not allowed to delete menu."],
+            },
+        };
+    }
     
     // delete storage
     const image = formData.get('image_url') as string;

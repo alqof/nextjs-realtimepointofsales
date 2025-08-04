@@ -10,12 +10,10 @@ import UiDialogCreateUpdateTable from "./ui-dialog-create-update-table";
 
 export default function DialogUpdateTable(
     { 
-        refetch, 
         currentData, 
         open, 
         handleChangeAction 
     }: {
-        refetch: ()=>void; 
         currentData?: tableSchemaValidation; 
         open?: boolean;
         handleChangeAction?: (open: boolean)=>void
@@ -63,7 +61,6 @@ export default function DialogUpdateTable(
             );
             formresolve.reset();
             handleChangeAction?.(false)
-            refetch();
         }
     }, [UpdateTableState])
 

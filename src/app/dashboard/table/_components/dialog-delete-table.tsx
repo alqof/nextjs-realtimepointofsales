@@ -9,12 +9,10 @@ import { INITIAL_ACTION_STATE } from "@/lib/constants/general-constant";
 
 export default function DialogDeleteTable(
     { 
-        refetch, 
         currentData, 
         open, 
         handleChangeAction 
     }: {
-        refetch: ()=>void; 
         currentData?: tableSchemaValidation; 
         open?: boolean;
         handleChangeAction?: (open: boolean)=>void
@@ -53,7 +51,6 @@ export default function DialogDeleteTable(
                 </span>,
             );
             handleChangeAction?.(false)
-            refetch();
         }
     }, [deleteTableState])
 

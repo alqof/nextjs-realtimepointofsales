@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import PageOrderDetail from './_components/002-pageOrderDetail'
 import Script from 'next/script';
-import { environments } from '@/config/environments';
+import { environments } from '@/lib/config/environments';
 
 
 export const metadata: Metadata = {

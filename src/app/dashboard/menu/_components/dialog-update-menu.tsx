@@ -13,12 +13,10 @@ import { actionUpdateMenu } from "@/lib/actions/action-menu";
 
 export default function DialogUpdateMenu(
     { 
-        refetch, 
         currentData, 
         open, 
         handleChangeAction 
     }: {
-        refetch: ()=>void; 
         currentData?: menuSchemaValidation; 
         open?: boolean;
         handleChangeAction?: (open: boolean)=>void
@@ -74,7 +72,6 @@ export default function DialogUpdateMenu(
             );
             formresolve.reset();
             handleChangeAction?.(false)
-            refetch();
         }
     }, [updateMenuState])
 

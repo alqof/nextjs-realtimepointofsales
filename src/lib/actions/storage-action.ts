@@ -1,5 +1,5 @@
 'use server';
-import { environments } from "@/config/environments";
+import { environments } from "@/lib/config/environments";
 import { createClient } from "../supabase/server";
 
 

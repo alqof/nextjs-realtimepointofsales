@@ -1,22 +1,27 @@
 "use client";
-import React, { useMemo, useRef, useState } from 'react'
+import { Metadata } from 'next'
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_TABLE, TABLE_LIMIT_LIST } from '@/lib/constants/general-constant';
+import { TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_MENU, TABLE_LIMIT_LIST } from '@/lib/constants/general-constant';
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner';
-import { Pencil, Plus, Trash2 } from 'lucide-react';
+import { Check, ImageOff, Loader2, Pencil, Plus, Trash2, X } from 'lucide-react';
+import { menuSchemaValidation } from '@/lib/validations/validation-menu';
+import { cn, convertIDR } from '@/lib/utils';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import TableSet from '@/components/table-set';
-import { tableSchemaValidation } from '@/lib/validations/validation-table';
-import { cn } from '@/lib/utils';
-import DialogCreateTable from './dialog-create-table';
-import DialogUpdateTable from './dialog-update-table';
-import DialogDeleteTable from './dialog-delete-table';
-import TableColumnDropdownAction from '../../../../../components/table-dropdown-action-set';
-
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import DialogCreateMenu from './dialog-create-menu';
+import DialogUpdateMenu from './dialog-update-menu';
+import DialogDeleteMenu from './dialog-delete-menu';
+import TableColumnDropdownAction from '../../../../components/table-dropdown-action-set';
+import { profile } from 'console';
+import { useAuthStore } from '@/lib/store/auth-store';
+import { createClientRealtime } from '@/lib/supabase/realtime';
 
 
 // Hooks Table
@@ -61,25 +66,24 @@ function useDebounce() {
     return debounce;
 }
 
-export default function PageTableManagement() {
-    const supabase = createClient();
+export default function PageMenuManagement() {
+    const profile = useAuthStore((state) => state.profile);
     const { currentSearch, handleChangeSearh, currentPage, handleChangePage, currentLimit, handleChangeLimit } = useTable();
-    const { data:tables, isLoading, refetch } = useQuery({
-        queryKey: ['tables', currentSearch, currentPage, currentLimit],
+    
+    const supabase = createClientRealtime();
+    const { data:menus, isLoading, refetch } = useQuery({
+        queryKey: ['menus', currentSearch, currentPage, currentLimit],
         queryFn: async()=>{
             const query = supabase
-                .from('tables')
+                .from('menus')
                 .select('*', { count: 'exact' })
                 .range((currentPage - 1) * currentLimit, currentPage * currentLimit - 1)
-                .order('name', { ascending: true });
+                .order('category', { ascending: true })
+                .order('name', { ascending: true })
+            ;
 
             if(currentSearch) {
-                const isNumber = !isNaN(Number(currentSearch));
-                if (isNumber) {
-                    query.or(`name.ilike.%${currentSearch}%,description.ilike.%${currentSearch}%,capacity.eq.${currentSearch},status.ilike.%${currentSearch}%`);
-                } else {
-                    query.or(`name.ilike.%${currentSearch}%,description.ilike.%${currentSearch}%,status.ilike.${currentSearch}%`);
-                }
+                query.or(`name.ilike.%${currentSearch}%,category.ilike.%${currentSearch}%`);
             }
 
             const result = await query;
@@ -91,7 +95,7 @@ export default function PageTableManagement() {
                         </svg>
                         {result.error.message}
                     </span>,
-                    { description: "Get table data failed." }
+                    { description: "Get menu data failed." }
                 )
             }
 
@@ -99,8 +103,28 @@ export default function PageTableManagement() {
         }
     })
 
+    useEffect(() => {
+        const channel = supabase
+            .channel('change-menu')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'menus',
+                },
+                () => { refetch() },
+            )
+            .subscribe()
+        ;
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, []);
+
     const [selectedAction, setSelectedAction] = useState<{
-        data: tableSchemaValidation, 
+        data: menuSchemaValidation, 
         type: 'update'|'delete'
     } | null>();
     
@@ -109,17 +133,34 @@ export default function PageTableManagement() {
     }
 
     const filteredData = useMemo(() => {
-        return (tables?.data || []).map((table: tableSchemaValidation, index) => {
+        return (menus?.data || []).map((menu: menuSchemaValidation, index) => {
             return [
                 currentLimit * (currentPage-1) + index + 1,
-                <span className='font-bold'>{table.name}</span>,
-                table.description,
-                table.capacity,
-                <div className={cn('w-fit px-2 py-1 rounded-full',
-                        (table.status==='available' ? 'bg-green-600' : table.status==='unavailable' ? 'bg-red-600' : table.status==='reserved' ? 'bg-orange-600' : 'bg-gray-400')
-                    )}
-                >
-                    <span className="font-bold text-xs text-white text-shadow-lg"> {table.status} </span>
+                <div className='flex items-center gap-2'>
+                    <div>
+                        {menu.image_url ? (
+                            <Avatar className="w-12 h-12 rounded-lg shadow-md">
+                                <AvatarImage src={menu.image_url as string} alt="preview" className="object-cover"/>
+                                <AvatarFallback className="rounded-lg w-full h-full flex items-center justify-center">
+                                    {/* <ImageOff className="w-2/3 h-2/3"/> */}
+                                    <Loader2 className='animate-spin'/>
+                                </AvatarFallback>
+                            </Avatar>
+                        ): (
+                            <ImageOff className="w-12 h-12 mb-2 rounded-lg shadow-md" />
+                        )}
+                    </div>
+                    <p className='break-words whitespace-normal'> {menu.name} </p>
+                </div>,
+                <span className="italic"> {menu.category} </span>,
+                <div>
+                    <p>Base: {convertIDR(menu.price)}</p>
+                    <p>Discount: {menu.discount}</p>
+                    <p>After Discount: {convertIDR(menu.price - (menu.price * menu.discount) / 100)}</p>
+                </div>,
+                <div className={cn('w-fit px-2 py-1 rounded-full', menu.is_available ? 'bg-green-600' : 'bg-red-600')}>
+                    <span className="text-white text-shadow-md"> {menu.is_available ? <Check size={12}/> : <X size={12}/>} </span>
+                    {/* <span className="font-bold text-xs text-white text-shadow-lg"> {menu.is_available ? 'Available' : 'Not Available'} </span> */}
                 </div>,
                 <TableColumnDropdownAction
                     menu={[
@@ -127,7 +168,7 @@ export default function PageTableManagement() {
                             label: (<span className="flex item-center gap-2"> <Pencil /> Edit </span>),
                             action: () => {
                                 setSelectedAction({
-                                    data: table,
+                                    data: menu,
                                     type: 'update'
                                 })
                             },
@@ -137,7 +178,7 @@ export default function PageTableManagement() {
                             variant: 'destructive',
                             action: () => {
                                 setSelectedAction({
-                                    data: table,
+                                    data: menu,
                                     type: 'delete'
                                 })
                             },
@@ -146,19 +187,19 @@ export default function PageTableManagement() {
                 />,
             ];
         });
-    }, [tables]);
+    }, [menus]);
 
     const totalPages = useMemo(() => {
         return (
-            tables && 
-            tables.count!==null ? Math.ceil(tables.count/currentLimit) : 0
+            menus && 
+            menus.count!==null ? Math.ceil(menus.count/currentLimit) : 0
         )
-    }, [tables, currentLimit])
+    }, [menus, currentLimit])
 
 
     return(
         <div className="w-full">
-            <h1 className="mb-6 text-2xl text-green-800 dark:text-green-200 font-bold"> Dining Table Management </h1>
+            <h1 className="mb-6 text-2xl text-green-800 dark:text-green-200 font-bold"> Menu Management </h1>
 
             <div className="w-full mb-2 flex flex-col lg:flex-row justify-between gap-2">
                 <div className="flex w-full gap-2">
@@ -178,31 +219,31 @@ export default function PageTableManagement() {
                     </Select>
 
                     {/* SEARCH */}
-                    <Input className="w-full" placeholder="Search by name, description, capacity, status... " onChange={(e)=>handleChangeSearh(e.target.value)}/>
+                    <Input className="w-full" placeholder="Search by name or category ... " onChange={(e)=>handleChangeSearh(e.target.value)}/>
                 </div>
 
-                {/* CREATE */}
-                <Dialog>
-                    <DialogTrigger asChild className="cursor-pointer">
-                        <Button variant="outline"> <Plus/> Create </Button>
-                    </DialogTrigger>
+                {/* CREATE MENU */}
+                {profile.role=='admin' && (
+                    <Dialog>
+                        <DialogTrigger asChild className="cursor-pointer">
+                            <Button variant="outline"> <Plus/> Create </Button>
+                        </DialogTrigger>
 
-                    <DialogCreateTable refetch={refetch}/>
-                </Dialog>
+                        <DialogCreateMenu/>
+                    </Dialog>
+                )}
             </div>
 
             {/* TABLE */}
-            <TableSet isLoading={isLoading} header={TABLE_HEADER_TABLE} data={filteredData} totalPages={totalPages} currentPage={currentPage} currentLimit={currentLimit} onChangePage={handleChangePage} onChangeLimit={handleChangeLimit} />
+            <TableSet isLoading={isLoading} header={TABLE_HEADER_MENU} data={filteredData} totalPages={totalPages} currentPage={currentPage} currentLimit={currentLimit} onChangePage={handleChangePage} onChangeLimit={handleChangeLimit} />
 
             {/* Dialog Content */}
-            <DialogUpdateTable 
-                refetch={refetch}
+            <DialogUpdateMenu 
                 currentData={selectedAction?.data}
                 open={selectedAction!==null && selectedAction?.type==='update'}
                 handleChangeAction={handleChangeAction}
             />
-            <DialogDeleteTable
-                refetch={refetch}
+            <DialogDeleteMenu
                 currentData={selectedAction?.data}
                 open={selectedAction!==null && selectedAction?.type==='delete'}
                 handleChangeAction={handleChangeAction}

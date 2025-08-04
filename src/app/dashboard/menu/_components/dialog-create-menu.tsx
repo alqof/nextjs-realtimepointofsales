@@ -8,7 +8,7 @@ import { createupdateMenuSchema, createupdateMenuSchemaValidation } from "@/lib/
 import { INITIAL_FORM_MENU, INITIAL_STATE_CREATE_UPDATE_MENU } from "@/lib/constants/menu-constants";
 import { actionCreateMenu } from "@/lib/actions/action-menu";
 
-export default function DialogCreateMenu({refetch}: {refetch: ()=>void}) {
+export default function DialogCreateMenu() {
     const formresolve = useForm<createupdateMenuSchemaValidation>({
         resolver: zodResolver(createupdateMenuSchema),
         defaultValues: INITIAL_FORM_MENU,
@@ -54,7 +54,6 @@ export default function DialogCreateMenu({refetch}: {refetch: ()=>void}) {
             formresolve.reset();
             setPreview(undefined);
             document.querySelector<HTMLButtonElement>('[data-state="open"]')?.click();
-            refetch();
         }
     }, [createMenuState])
     

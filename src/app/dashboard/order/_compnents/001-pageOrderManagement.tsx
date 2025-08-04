@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import DropdownAction from '../../../../../components/table-dropdown-action-set';
+import DropdownAction from '../../../../components/table-dropdown-action-set';
 import TableSet from '@/components/table-set';
 import { tableSchemaValidation } from '@/lib/validations/validation-table';
 import { cn } from '@/lib/utils';
@@ -16,7 +16,9 @@ import DialogCreateOrder from './dialog-create-order';
 import { actionUpdateReservation } from '@/lib/actions/action-order';
 import Link from 'next/link';
 import { INITIAL_ACTION_STATE, TABLE_DEFAULT_LIMIT, TABLE_DEFAULT_PAGE, TABLE_HEADER_ORDER, TABLE_LIMIT_LIST } from '@/lib/constants/general-constant';
-import TableColumnDropdownAction from '../../../../../components/table-dropdown-action-set';
+import TableColumnDropdownAction from '../../../../components/table-dropdown-action-set';
+import { useAuthStore } from '@/lib/store/auth-store';
+import { createClientRealtime } from '@/lib/supabase/realtime';
 
 
 // Hooks Table
@@ -62,9 +64,10 @@ function useDebounce() {
 }
 
 export default function PageOrderManagement() {
+    const profile = useAuthStore((state) => state.profile);
     const { currentSearch, handleChangeSearh, currentPage, handleChangePage, currentLimit, handleChangeLimit } = useTable();
 
-    const supabase = createClient();
+    const supabase = createClientRealtime();
     const { data: orders, isLoading, refetch: refetchOrders } = useQuery({ //get data from orders
         queryKey: ['orders', currentSearch, currentPage, currentLimit],
         queryFn: async()=>{
@@ -107,6 +110,29 @@ export default function PageOrderManagement() {
             return result.data;
         },
     });
+
+    useEffect(() => {
+        const channel = supabase
+            .channel('change-order')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'orders',
+                },
+                () => { 
+                    refetchOrders(); 
+                    refetchTables();
+                },
+            )
+            .subscribe()
+        ;
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, []);
 
     // HANDLE ACTION untuk order status reserve (process, cancel)
     const [updateReservationState, updateReservationAction] = useActionState(actionUpdateReservation, INITIAL_ACTION_STATE);
@@ -157,7 +183,7 @@ export default function PageOrderManagement() {
             refetchTables();
         }
     }, [updateReservationState])
-    
+
     const reservedActionList = [
         {
             label: (<span className="flex items-center gap-2"> <Link2Icon /> Process </span>),
@@ -173,7 +199,6 @@ export default function PageOrderManagement() {
         },
     ];
 
-
     const filteredData = useMemo(() => {
         return (orders?.data || []).map((order, index) => {
             return [
@@ -188,18 +213,16 @@ export default function PageOrderManagement() {
                         'bg-red-600': order.status === 'canceled',
                     })}
                 >
-                    {order.status}
+                    <span className="font-bold text-xs text-white text-shadow-lg"> {order.status} </span>
                 </div>,
                 <TableColumnDropdownAction
-                    menu={ order.status==='reserved'
-                        ? reservedActionList.map((item) => ({
+                    menu={ order.status==='reserved' ? 
+                        reservedActionList.map((item) => ({
                             label: item.label,
-                            action: () =>
-                                item.action(order.id, (order.tables as unknown as { id: string }).id)
-                            }))
-                        : [{
+                            action: () => item.action(order.id, (order.tables as unknown as { id: string }).id),
+                        })) : [{
                             label: (
-                                <Link href={`/admin/order/${order.order_id}`} className="flex items-center gap-2">
+                                <Link href={`/dashboard/order/${order.order_id}`} className="flex items-center gap-2">
                                     <ScrollText /> Detail
                                 </Link>
                             ),
@@ -245,13 +268,16 @@ export default function PageOrderManagement() {
                 </div>
 
                 {/* CREATE */}
-                <Dialog>
-                    <DialogTrigger asChild className="cursor-pointer">
-                        <Button variant="outline"> <Plus/> Add Order </Button>
-                    </DialogTrigger>
+                {profile.role!=='kitchen' && (
+                    <Dialog>
+                        <DialogTrigger asChild className="cursor-pointer">
+                            <Button variant="outline"> <Plus/> Add Order </Button>
+                        </DialogTrigger>
 
-                    <DialogCreateOrder refetchOrders={refetchOrders} refetchTables={refetchTables} tables={tables}/>
-                </Dialog>
+                        {/* <DialogCreateOrder tables={tables}/> */}
+                        <DialogCreateOrder refetchOrders={refetchOrders} refetchTables={refetchTables} tables={tables}/>
+                    </Dialog>
+                )}
             </div>
 
             {/* TABLE */}

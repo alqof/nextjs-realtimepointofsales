@@ -56,11 +56,11 @@ export const INITIAL_ROLE = [
         label: 'Admin',
     },
     {
-        value: 'kitchen',
-        label: 'Kitchen',
-    },
-    {
         value: 'cashier',
         label: 'Cashier',
+    },
+    {
+        value: 'kitchen',
+        label: 'Kitchen',
     },
 ]

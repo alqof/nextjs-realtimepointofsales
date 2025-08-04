@@ -1,11 +1,12 @@
 import { Metadata } from 'next'
 import React from 'react'
 
+
 export const metadata: Metadata = {
-    title: 'QopzKuy | Admin'
+    title: 'QopzKuy | Dashboard'
 }
 
-export default function PageAdmin(){
+export default function PageDashboard(){
     return(
         <div className="w-full">
             <h1 className="mb-6 text-2xl text-green-800 dark:text-green-200 font-bold"> Dashboard </h1>

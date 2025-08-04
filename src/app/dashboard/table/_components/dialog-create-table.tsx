@@ -7,7 +7,7 @@ import { INITIAL_DEFAULT_FORM_TABLE, INITIAL_STATE_CREATE_UPDATE_TABLE } from "@
 import { actionCreateTable } from "@/lib/actions/action-table";
 import UiDialogCreateUpdateTable from "./ui-dialog-create-update-table";
 
-export default function DialogCreateTable({refetch}: {refetch: ()=>void}) {
+export default function DialogCreateTable() {
     const formresolve = useForm<createupdateTableSchemaValidation>({
         resolver: zodResolver(createupdateTableSchema),
         defaultValues: INITIAL_DEFAULT_FORM_TABLE,
@@ -49,7 +49,6 @@ export default function DialogCreateTable({refetch}: {refetch: ()=>void}) {
             );
             formresolve.reset();
             document.querySelector<HTMLButtonElement>('[data-state="open"]')?.click();
-            refetch();
         }
     }, [createTableState])
     

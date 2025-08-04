@@ -3,12 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 import { cartState, formState, orderFormState } from "../types";
 import { createOrderSchema } from "../validations/validation-order";
 import { redirect } from "next/navigation";
-import { environments } from "@/config/environments";
+import { environments } from "@/lib/config/environments";
 import midtransClient from "midtrans-client"
 
 
 export async function actionCreateOrder(prevState:orderFormState, formData: FormData){
-    let validationFields = createOrderSchema.safeParse({
+    const validationFields = createOrderSchema.safeParse({
         customer_name: formData.get('customer_name'),
         table_id: formData.get('table_id'),
         status: formData.get('status'),
@@ -72,6 +72,41 @@ export async function actionCreateOrder(prevState:orderFormState, formData: Form
 
 export async function actionUpdateReservation(prevState:formState, formData: FormData){
     const supabase = await createClient();
+    // Get current user && Ambil role user dari table profiles
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Unauthorized access!"],
+            },
+        };
+    }
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single()
+    ;
+    if (profileError || !profile) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Profile not found!"],
+            },
+        };
+    }
+    if (profile.role==="kitchen") { // Hanya admin dan cashier yang bisa eksekusi
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Kitchen is not allowed to process !"],
+            },
+        };
+    }
 
     const [orderResult, tableResult] = await Promise.all([
         supabase
@@ -107,6 +142,42 @@ export async function actionUpdateReservation(prevState:formState, formData: For
 
 export async function actionUpdateStatusOrder(prevState: formState, formData: FormData) {
     const supabase = await createClient();
+    // Get current user && Ambil role user dari table profiles
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Unauthorized access!"],
+            },
+        };
+    }
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single()
+    ;
+    if (profileError || !profile) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Profile not found!"],
+            },
+        };
+    }
+    if (profile.role==="cashier") { // Hanya kitchen yang bisa eksekusi
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Only the kitchen is allowed to process!"],
+            },
+        };
+    }
+
     const { error } = await supabase
         .from('orders_menus')
         .update({status: formData.get('status')})
@@ -143,7 +214,7 @@ export async function actionAddMenuOrder(prevState: orderFormState, data: { orde
         };
     }
 
-    redirect(`/admin/order/${data.order_id}`);
+    redirect(`/dashboard/order/${data.order_id}`);
 }
 
 export async function actionGeneratePayment(prevState: formState, formData: FormData) {

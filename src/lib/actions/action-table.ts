@@ -5,7 +5,7 @@ import { tableSchema } from "../validations/validation-table";
 
 
 export async function actionCreateTable(prevState:tableFormState, formData: FormData){
-    let validationFields = tableSchema.safeParse({
+    const validationFields = tableSchema.safeParse({
         name: formData.get('name'),
         description: formData.get('description'),
         capacity: parseInt(formData.get('capacity') as string),
@@ -51,7 +51,7 @@ export async function actionCreateTable(prevState:tableFormState, formData: Form
 
 // Update
 export async function actionUpdateTable(prevState:tableFormState, formData: FormData){
-    let validationFields = tableSchema.safeParse({
+    const validationFields = tableSchema.safeParse({
         name: formData.get('name'),
         description: formData.get('description'),
         capacity: parseInt(formData.get('capacity') as string),
@@ -100,12 +100,49 @@ export async function actionUpdateTable(prevState:tableFormState, formData: Form
 // Delete
 export async function actionDeleteTable(prevState: tableFormState, formData: FormData) {
     const supabase = await createClient();
+    
+    // Get current user && Ambil role user dari table profiles
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Unauthorized access!"],
+            },
+        };
+    }
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single()
+    ;
+    if (profileError || !profile) {
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["Profile not found!"],
+            },
+        };
+    }
+    if (profile.role !== "admin") { // Hanya admin yang bisa delete
+        return {
+            status: 'error',
+            errors: {
+                ...prevState.errors,
+                _form: ["You are not allowed to delete menu."],
+            },
+        };
+    }
 
     // delete item from supabase
     const { error } = await supabase
         .from('tables')
         .delete()
-        .eq('id', formData.get('id'));
+        .eq('id', formData.get('id'))
+    ;
 
     if (error) {
         return {

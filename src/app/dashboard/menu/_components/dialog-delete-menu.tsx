@@ -9,12 +9,10 @@ import { INITIAL_ACTION_STATE } from "@/lib/constants/general-constant";
 
 export default function DialogDeleteMenu(
     { 
-        refetch, 
         currentData, 
         open, 
         handleChangeAction 
     }: {
-        refetch: ()=>void; 
         currentData?: menuSchemaValidation; 
         open?: boolean;
         handleChangeAction?: (open: boolean)=>void
@@ -55,7 +53,6 @@ export default function DialogDeleteMenu(
                 </span>,
             );
             handleChangeAction?.(false)
-            refetch();
         }
     }, [deleteMenuState])
 

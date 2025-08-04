@@ -87,7 +87,7 @@ const Login = () => {
 
                         <div>
                             <Button className='w-full mt-6' type='submit'> {isLoginPending ? <Loader/> : 'Login'} </Button>
-                            <p className='mt-3 text-xs'>Don't you have account? <span className='font-bold'>Sign In</span> </p>
+                            <p className='mt-3 text-xs'>Don&apos;t you have account? <span className='font-bold'>Sign In</span> </p>
                         </div>
                     </form>
                 </Form>

@@ -14,6 +14,8 @@ import { toast } from "sonner";
 import SummaryOrderDetail from "./summaryOrderDetail";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { actionUpdateStatusOrder } from "@/lib/actions/action-order";
+import { useAuthStore } from "@/lib/store/auth-store";
+import { createClientRealtime } from "@/lib/supabase/realtime";
 
 
 // Hooks Table
@@ -33,16 +35,18 @@ function useTable() {
 }
 
 export default function PageOrderDetail({order_id}: {order_id: string}) {
+    const profile = useAuthStore((state) => state.profile);
     const { currentPage, handleChangePage, currentLimit, handleChangeLimit } = useTable();
 
-    const supabase = createClient();
+    const supabase = createClientRealtime();
     const { data: orders } = useQuery({ //get data from orders
         queryKey: ['orders', order_id],
         queryFn: async()=>{
             const result = await supabase
                 .from('orders')
                 .select('id, customer_name, status, payment_token, tables(name, id)', { count: 'exact' })
-                .eq('order_id', order_id).single()
+                .eq('order_id', order_id)
+                .single()
             ;
 
             if(result.error){
@@ -80,6 +84,29 @@ export default function PageOrderDetail({order_id}: {order_id: string}) {
         },
         enabled: !!orders?.data?.id,
     });
+
+    useEffect(() => {
+        if (!orders?.data?.id) return;
+        const channel = supabase
+            .channel('change-order')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'orders_menus',
+                    filter: `order_id=eq.${orders.data.id}`,
+                },
+                () => { refetchOrdersMenus() },
+            )
+            .subscribe()
+        ;
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [orders?.data?.id]);
+
 
     const [updateStatusOrderState, updateStatusOrderAction] = useActionState(actionUpdateStatusOrder, INITIAL_ACTION_STATE);
     const handleUpdateStatusOrder = async (data: {id: string; status: string;}) => {
@@ -188,7 +215,7 @@ export default function PageOrderDetail({order_id}: {order_id: string}) {
 
     return(
         <div className="w-full">
-            <h1 className="mb-6 text-2xl text-green-800 dark:text-green-200 font-bold"> Order Detail </h1>
+            <h1 className="mb-6 text-2xl text-green-800 dark:text-green-200 font-bold"> Order detail </h1>
 
             <div className="w-full mb-2 flex flex-col lg:flex-row justify-between gap-2">
                 <div className="flex w-full gap-2">
@@ -209,18 +236,28 @@ export default function PageOrderDetail({order_id}: {order_id: string}) {
                 </div>
 
                 {/* Add Menu */}
-                <Link href={`/admin/order/${order_id}/add`}>
-                    <Button className="cursor-pointer" variant="outline"> <Plus/> Add menu Item </Button>
-                </Link>
+                {profile.role!=='kitchen' && (
+                    <Link href={`/dashboard/order/${order_id}/add`}>
+                        <Button className="cursor-pointer" variant="outline"> <Plus/> Add menu Item </Button>
+                    </Link>
+                )}
             </div>
 
             <div className="flex gap-4">
-                <div className="w-2/3">
-                    <TableSet isLoading={isLoading} header={TABLE_HEADER_ORDER_DETAIL} data={filteredData} totalPages={totalPages} currentPage={currentPage} currentLimit={currentLimit} onChangePage={handleChangePage} onChangeLimit={handleChangeLimit} />
-                </div>
-                <div className="w-1/3">
-                    <SummaryOrderDetail order_id={order_id} orders={orders?.data} ordersMenus={ordersMenus?.data} />
-                </div>
+                {profile.role=='kitchen' ? (
+                    <div className="w-full">
+                        <TableSet isLoading={isLoading} header={TABLE_HEADER_ORDER_DETAIL} data={filteredData} totalPages={totalPages} currentPage={currentPage} currentLimit={currentLimit} onChangePage={handleChangePage} onChangeLimit={handleChangeLimit} />
+                    </div>
+                ):(
+                    <>
+                        <div className="w-full">
+                            <TableSet isLoading={isLoading} header={TABLE_HEADER_ORDER_DETAIL} data={filteredData} totalPages={totalPages} currentPage={currentPage} currentLimit={currentLimit} onChangePage={handleChangePage} onChangeLimit={handleChangeLimit} />
+                        </div>
+                        <div className="w-1/3">
+                            <SummaryOrderDetail order_id={order_id} orders={orders?.data} ordersMenus={ordersMenus?.data} />
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     )

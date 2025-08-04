@@ -42,8 +42,7 @@ export function AppSidebar() {
                                     <SidebarMenuButton 
                                         asChild 
                                         tooltip={item.title} 
-                                        className={cn(
-                                            'h-auto p-3 flex items-center gap-2 rounded-md transition-colors',
+                                        className={cn('h-auto p-3 flex items-center gap-2 rounded-md transition-colors',
                                             {
                                                 'bg-green-600 hover:bg-green-700 text-white hover:text-white': pathname === item.url,
                                                 'hover:bg-zinc-200 dark:hover:bg-zinc-800': pathname !== item.url,
