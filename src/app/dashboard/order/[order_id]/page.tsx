@@ -19,7 +19,7 @@ export default async function PageOrderId({params}: {params: Promise<{order_id: 
 
     return (
         <>
-            <Script src='https://app.sandbox.midtrans.com/snap/snap.js' data-client-key={environments.MIDTRANS_CLIENT_KEY} strategy="lazyOnload" />
+            <Script src='https://app.sandbox.midtrans.com/snap/snap.js' data-client-key={environments.MIDTRANS_CLIENT_KEY} strategy="lazyOnload" unsafe-inline />
             <PageOrderDetail order_id={order_id} />
         </>
     )
