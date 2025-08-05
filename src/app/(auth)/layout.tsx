@@ -11,19 +11,7 @@ export default function AuthLayout({children}: {children: React.ReactNode}){
             <div className='absolute top-3 right-3'>
                 <ThemeToggle/>
             </div>
-
-            <div className="p-3 mb-3 flex justify-between items-center">
-                <div className='flex gap-3'>
-                    <div className="p-2 rounded-md bg-green-600">
-                        <Coffee size={24} className="inline md:hidden"/>
-                        <Coffee size={28} className="hidden md:inline"/>
-                    </div>
-                    <p className='text-2xl md:text-3xl font-bold drop-shadow-md drop-shadow-green-400'> QopzKuy </p>
-                </div>
-            </div>
-
             <Toaster position='top-center' />
-
             {children}
         </div>
     )

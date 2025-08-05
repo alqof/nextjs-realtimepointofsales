@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 
 export const metadata: Metadata = {
-    title: 'QopzKuy | Payment Failed'
+    title: 'Qashless | Payment Failed'
 }
 
 export default function PagePaymentFailed(){

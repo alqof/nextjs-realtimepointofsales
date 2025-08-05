@@ -10,8 +10,9 @@ import { loginFormValidation, loginSchema } from '@/lib/validations/validation-a
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { actionLogin } from '../../../../lib/actions/action-auth-login';
-import { Loader } from 'lucide-react';
+import { Coffee, Loader } from 'lucide-react';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 
 const Login = () => {
@@ -55,8 +56,16 @@ const Login = () => {
     return (
         <Card className='w-full md:w-2/7'>
             <CardHeader className='text-center'>
-                <CardTitle className='text-xl'> Welcome Everyone </CardTitle>
-                <CardDescription> Login to access all features </CardDescription>
+                <div className="flex items-center gap-3">
+                    <div className="p-1 bg-green-700 rounded-lg">
+                        <Image src='/assets/logo/qashless-coin.png' alt='qashless' width={90} height={90} />
+                    </div>
+
+                    <div className='text-left'>
+                        <CardTitle className='text-xl'> Welcome Everyone </CardTitle>
+                        <CardDescription> Login to access all features </CardDescription>
+                    </div>
+                </div>
             </CardHeader>
 
             <CardContent>
@@ -87,7 +96,8 @@ const Login = () => {
 
                         <div>
                             <Button className='w-full mt-6' type='submit'> {isLoginPending ? <Loader/> : 'Login'} </Button>
-                            <p className='mt-3 text-xs'>Don&apos;t you have account? <span className='font-bold'>Sign In</span> </p>
+                            <p className='mt-3 text-xs'>Don&apos;t you have account? <span className='font-bold'>Contact Us</span> </p>
+                            {/* <p className='mt-3 text-xs'>Don&apos;t you have account? <span className='font-bold'>Sign Up</span> </p> */}
                         </div>
                     </form>
                 </Form>

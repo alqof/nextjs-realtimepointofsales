@@ -31,7 +31,7 @@ export async function actionCreateOrder(prevState:orderFormState, formData: Form
     const now = new Date();
     const date = now.toISOString().slice(0,10).replace(/-/g,''); // yyyymmdd
     const time = now.toTimeString().slice(0,5).replace(/:/g,''); // hhmm
-    const generatedOrderId = `QACHLESS-${date}${time}`;
+    const generatedOrderId = `QASHLESS-${date}${time}`;
 
     const [orderResult, tableResult] = await Promise.all([
         supabase

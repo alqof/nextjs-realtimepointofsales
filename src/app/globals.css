@@ -120,3 +120,34 @@
     @apply bg-background text-foreground;
   }
 }
+
+.libertinus-serif-regular {
+  font-family: "Libertinus Serif", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.libertinus-serif-semibold {
+  font-family: "Libertinus Serif", serif;
+  font-weight: 600;
+  font-style: normal;
+}
+.libertinus-serif-bold {
+  font-family: "Libertinus Serif", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.libertinus-serif-regular-italic {
+  font-family: "Libertinus Serif", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+.libertinus-serif-semibold-italic {
+  font-family: "Libertinus Serif", serif;
+  font-weight: 600;
+  font-style: italic;
+}
+.libertinus-serif-bold-italic {
+  font-family: "Libertinus Serif", serif;
+  font-weight: 700;
+  font-style: italic;
+}

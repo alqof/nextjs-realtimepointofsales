@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen flex flex-col items-center justify-center bg-mute">
-        <h1 className="text-xl mb-4"> Welcome to QopzKuy</h1>
+        <h1 className="text-xl mb-4"> Welcome to Qashless</h1>
         <Link href="/dashboard">
           <Button className="cursor-pointer"> Access to Dashboard</Button>
         </Link>

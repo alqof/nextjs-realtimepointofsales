@@ -1,6 +1,6 @@
 'use client'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
-import { Calendar, ChevronUp, CircleUserRound, Coffee, EllipsisVertical, Home, Inbox, LogOut, Search, Settings, ShoppingCart, User2 } from "lucide-react"
+import { Calendar, ChevronUp, CircleUserRound, Coffee, EllipsisVertical, Home, Inbox, LayoutDashboard, LogOut, Search, Settings, ShoppingCart, User2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { SIDEBAR_MENU, SidebarMenuKey } from "@/lib/constants/general-constant"
@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { signOut } from "@/lib/actions/action-auth-logout"
 import { useAuthStore } from "@/lib/store/auth-store"
+import Image from "next/image"
 
 
 export function AppSidebar() {
@@ -22,10 +23,13 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild className="hover:bg-transparent focus:bg-transparent active:bg-transparent" size="lg">
                             <div>
-                                <div className="p-2 flex items-center justify-center rounded-md bg-green-600">
-                                    <Coffee className="size-4" />
+                                <div className="p-2 rounded-md bg-green-600">
+                                    <LayoutDashboard className="size-4" />
                                 </div>
-                                <p className='text-2xl font-bold drop-shadow-md drop-shadow-green-400'> QopzKuy </p>
+                                {/* <div className="p-2 flex items-center justify-center rounded-md bg-green-700">
+                                    <Image className="size-4" src='/assets/logo/qashless-coin.png' alt='qashless' width={16} height={16} />
+                                </div> */}
+                                <p className='text-2xl font-bold drop-shadow-md drop-shadow-green-400'> Qashless </p>
                             </div>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

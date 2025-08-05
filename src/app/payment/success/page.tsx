@@ -5,7 +5,7 @@ import React from 'react'
 import PageContentSuccess from './_components/pageContentSuccess'
 
 export const metadata: Metadata = {
-    title: 'QopzKuy | Payment Success'
+    title: 'QachleQashlessss | Payment Success'
 }
 
 export default function PagePaymentSuccess(){

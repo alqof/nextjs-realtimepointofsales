@@ -3,7 +3,7 @@ import PageOrderManagement from './_compnents/001-pageOrderManagement'
 
 
 export const metadata: Metadata = {
-    title: 'QopzKuy | Order'
+    title: 'Qashless | Order'
 }
 
 declare global {

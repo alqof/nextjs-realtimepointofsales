@@ -4,7 +4,7 @@ import Login from './_components/login'
 
 
 export const metadata: Metadata = {
-    title: 'QopzKuy | Login'
+    title: 'Qashless | Login'
 }
 
 const LoginPage = () => {

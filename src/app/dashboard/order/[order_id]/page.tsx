@@ -5,7 +5,7 @@ import { environments } from '@/lib/config/environments';
 
 
 export const metadata: Metadata = {
-    title: 'QopzKuy | Order Detail'
+    title: 'Qashless | Order Detail'
 }
 
 declare global {
