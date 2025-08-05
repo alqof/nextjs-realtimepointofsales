@@ -40,7 +40,6 @@ export default function DashboardContent() {
     const [areaChartData, setAreaChartData] = useState<areaType[]>([])
     const [pieChartData, setPieChartData] = useState<pieType[]>([])
     const [dateNow, setDateNow] = useState('')
-
     // Active Chart (hanya ada satu: totalIncome)
     const [activeChart, setActiveChart] = useState<keyof typeof barChartConfig>("total")
     const [timeRange, setTimeRange] = useState("30d")
@@ -49,7 +48,7 @@ export default function DashboardContent() {
     useEffect(() => {
         const barArr: barType[] = []
         const areaArr: areaType[] = []
-        let pieSummary = { coffee: 0, nonCoffee: 0, food: 0, snack: 0 }
+        const pieSummary = { coffee: 0, nonCoffee: 0, food: 0, snack: 0 }
 
         for (let i=0; i<days; i++) {
             const dateObj = new Date(today)
